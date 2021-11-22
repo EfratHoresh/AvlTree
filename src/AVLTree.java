@@ -88,6 +88,7 @@ public class AVLTree {
             node.setRight(added_node);
         }
 //        starting rebalance
+        int num_of_rotations = 0;
         while (node!=null) {
 //            calculate Balance Factor:
             int BF = balanceFactor(node, k);
@@ -109,10 +110,33 @@ public class AVLTree {
             }
             else {
                 //!BF_legal
+                if(BF == 2) {
+                    if(balanceFactor(node.getLeft(),k) == 1) {
+                        right(node);
+                        num_of_rotations++;
+                    }
+                    else { // node.left.BF == -1
+                        left(node.getLeft());
+                        right(node);
+                        num_of_rotations += 2;
+                    }
+
+                }
+                else {  // Bf == -2
+                    if(balanceFactor(node.getRight(),k) == -1) {
+                        left(node);
+                        num_of_rotations++;
+                    }
+                    else { // node.right.BF == +1
+                        right(node.getRight());
+                        left(node);
+                        num_of_rotations += 2;
+                    }
+                }
 
             }
             }
-        return 0;
+        return num_of_rotations;
         }
 
     public void update_height_from_bottom(IAVLNode node) {
@@ -138,6 +162,25 @@ public class AVLTree {
             left_height++;
         }
         return left_height-right_height;
+    }
+
+
+    public void right(IAVLNode B) {   // right rotation; if B.BF +2, B.left.Bf = +1
+        IAVLNode A = B.getLeft();
+        A.setParent(B.getParent());
+        B.setParent(A);
+        A.getRight().setParent(B);
+        B.setLeft(A.getRight());
+        A.setRight(B);
+    }
+
+    public void left(IAVLNode B) {   // left rotation; if B.BF +2, B.left.Bf = -1
+        IAVLNode A = B.getRight();
+        A.setParent(B.getParent());
+        B.setParent(A);
+        A.getLeft().setParent(B);
+        B.setRight(A.getLeft());
+        A.setLeft(B);
     }
 
 
