@@ -137,6 +137,7 @@ public class AVLTree {
 
             }
         }
+        update_size_from_bottom(added_node);
         return num_of_rotations;
     }
 
@@ -153,7 +154,19 @@ public class AVLTree {
         }
     }
 
-    public void updateHeight(IAVLNode node) {
+
+    public void update_size_from_bottom(IAVLNode node) {
+        while (node != null) {
+            node.updateSize();
+            node = node.getParent();
+            }
+        }
+
+
+
+
+
+        public void updateHeight(IAVLNode node) {
         node.setHeight(1 + Math.max(node.getRight().getHeight(), node.getLeft().getHeight()));
     }
 
@@ -345,6 +358,7 @@ public class AVLTree {
         return null;
     }
 
+
     /**
      * public int join(IAVLNode x, AVLTree t)
      * <p>
@@ -354,9 +368,12 @@ public class AVLTree {
      * precondition: keys(t) < x < keys() or keys(t) > x > keys(). t/tree might be empty (rank = -1).
      * postcondition: none
      */
+
+
     public int join(IAVLNode x, AVLTree t) {
         return -1;
     }
+
 
     /**
      * public interface IAVLNode
@@ -384,6 +401,10 @@ public class AVLTree {
         public void setHeight(int height); // Sets the height of the node.
 
         public int getHeight(); // Returns the height of the node (-1 for virtual nodes).
+
+        public int getSize();
+
+        public void updateSize();
     }
 
     /**
@@ -466,6 +487,12 @@ public class AVLTree {
             return this.height; // to be replaced by student code
         }
 
+        public int getSize() {return this.size;}
+
+        public void updateSize() {this.size = this.getLeft().getSize()+this.getRight().getSize()+1;}
+
     }
-}
+    }
+
+
 
