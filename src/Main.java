@@ -11,6 +11,7 @@ public class Main {
         tree.insert(2, "two");
         tree.insert(6, "six");
         tree.insert(7, "seven");
+        tree.delete(6);
         System.out.println(tree.empty());
 
 
