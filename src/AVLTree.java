@@ -487,15 +487,20 @@ public class AVLTree {
         return this.root;
     }
 
-    /**
-     * public AVLTree[] split(int x)
-     * <p>
-     * splits the tree into 2 trees according to the key x.
-     * Returns an array [t1, t2] with two AVL trees. keys(t1) < x < keys(t2).
-     * <p>
-     * precondition: search(x) != null (i.e. you can also assume that the tree is not empty)
-     * postcondition: none
-     */
+    public int getTreeHeight() {
+        return this.getRoot().getHeight();
+    }
+
+
+        /**
+         * public AVLTree[] split(int x)
+         * <p>
+         * splits the tree into 2 trees according to the key x.
+         * Returns an array [t1, t2] with two AVL trees. keys(t1) < x < keys(t2).
+         * <p>
+         * precondition: search(x) != null (i.e. you can also assume that the tree is not empty)
+         * postcondition: none
+         */
     public AVLTree[] split(int x) {
         return null;
     }
@@ -513,7 +518,85 @@ public class AVLTree {
 
 
     public int join(IAVLNode x, AVLTree t) {
-        return -1;
+        // save original heights
+        IAVLNode virtual_node = new AVLNode(-1, null);
+        if (t.empty() && this.empty()) {
+            x.setRight(virtual_node);
+            x.setLeft(virtual_node);
+            this.root = x;
+            return 1;
+        }
+        int t_height;
+        int this_height;
+        if (t.empty()) {
+            t.root = virtual_node;
+        }
+        if (this.empty()) {
+            this.root = virtual_node;
+        }
+        t_height = t.getTreeHeight();
+        this_height = this.getTreeHeight();
+        AVLTree tall_tree;
+        AVLTree short_tree;
+        if (t_height <= this_height) {
+            short_tree = t;
+            tall_tree = this;
+        }
+        else {
+            short_tree = this;
+            tall_tree = t;
+        }
+        IAVLNode h_node = tall_tree.getRoot();
+        if (tall_tree.getRoot().getKey() > x.getKey()) {
+            while (h_node.getHeight() > short_tree.getTreeHeight()) {
+                h_node = h_node.getLeft();
+            }
+            if (h_node.getParent()!=null) {
+                h_node.getParent().setLeft(x);
+            }
+            x.setRight(h_node);
+            x.setLeft(short_tree.getRoot());
+        }
+        else { //tall tree smaller than x
+            while (h_node.getHeight() > short_tree.getTreeHeight()) {
+                h_node = h_node.getRight();
+            }
+            if (h_node.getParent()!=null) {
+                h_node.getParent().setRight(x);
+            }
+            x.setLeft(h_node);
+            x.setRight(short_tree.getRoot());
+        }
+        while (x!=null) {
+            this.updateHeight(x);
+            x.updateSize();
+            int BF = balanceFactor(x);
+            if (BF==2) {
+                if (balanceFactor(x.getLeft()) == 1 || balanceFactor(x.getLeft()) == 0) {
+                    right(x);
+                }
+                else {
+                    left(x.getLeft());
+                    right(x);
+                }
+            }
+            else if (BF==-2) {
+                if (balanceFactor(x.getRight()) == -1 || balanceFactor(x.getRight()) == 0) {
+                    left(x);
+                }
+                else {
+                    right(x.getRight());
+                }
+            }
+            if (x.getParent()==null) {
+                break;
+            }
+            x = x.getParent();
+        }
+        this.root = x;
+        x.updateSize();
+        this.updateHeight(x);
+        return Math.abs(this_height-t_height) + 1;
     }
 
 
@@ -593,6 +676,10 @@ public class AVLTree {
         }
 
         public void setLeft(IAVLNode node) {
+            IAVLNode virtal_node = new AVLNode(-1, null);
+            if (node == null) {
+                node = virtal_node;
+            }
             this.left = node;
             node.setParent(this);
         }
@@ -602,6 +689,10 @@ public class AVLTree {
         }
 
         public void setRight(IAVLNode node) {
+            IAVLNode virtal_node = new AVLNode(-1, null);
+            if (node == null) {
+                node = virtal_node;
+            }
             this.right = node;
             node.setParent(this);
         }
