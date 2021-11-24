@@ -72,6 +72,7 @@ public class AVLTree {
 //        creating new node and virtual sons
         IAVLNode virtual_node = new AVLNode(-1, null);
         IAVLNode added_node = new AVLNode(k, i);
+        int num_of_height_changes = 0;
         virtual_node.setParent(added_node);
         added_node.setLeft(virtual_node);
         added_node.setRight(virtual_node);
@@ -106,40 +107,43 @@ public class AVLTree {
             }
             else if (Math.abs(BF)==1) {
                 node.setHeight(node.getHeight()+1); //update height
+                num_of_height_changes++;
                 node = node.getParent();
             }
             else if (BF == 2) {
                 if (balanceFactor(node.getLeft()) == 1) {
-                    right(node);
+                    num_of_height_changes += right(node);
                     num_of_rotations++;
                 } else { // node.left.BF == -1
-                    left(node.getLeft());
-                    right(node);
+                    num_of_height_changes += left(node.getLeft());
+                    num_of_height_changes += right(node);
                     num_of_rotations += 2;
                 }
                 break;
                 }
             else {  // Bf == -2
                 if (balanceFactor(node.getRight()) == -1) {
-                    left(node);
+                    num_of_height_changes += left(node);
                     num_of_rotations++;
                 } else { // node.right.BF == +1
-                    right(node.getRight());
-                    left(node);
+                    num_of_height_changes += right(node.getRight());
+                    num_of_height_changes += left(node);
                     num_of_rotations += 2;
                 }
                 break;
                 }
             }
         updateSizeFromBottom(added_node);
-        return num_of_rotations;
+        return num_of_rotations + num_of_height_changes;
     }
 
-    public void updateHeightFromBottom(IAVLNode node) {
+    public int updateHeightFromBottom(IAVLNode node) {
+        int num_of_height_changes = 0;
         while (node!=null) {
-            updateHeight(node);
+            num_of_height_changes += updateHeight(node);
             node = node.getParent();
         }
+        return num_of_height_changes;
     }
 
 
@@ -151,8 +155,13 @@ public class AVLTree {
         }
 
 
-        public void updateHeight(IAVLNode node) {
+        public int updateHeight(IAVLNode node) {
+        int old_height = node.getHeight();
         node.setHeight(1 + Math.max(node.getRight().getHeight(), node.getLeft().getHeight()));
+        if (old_height== node.getHeight()) {
+            return 0;
+        }
+        return 1;
     }
 
     public int balanceFactor(IAVLNode node) {
@@ -162,16 +171,17 @@ public class AVLTree {
     }
 
 
-    public void right(IAVLNode B) {   // right rotation; if B.BF +2, B.left.Bf = +1
+    public int right(IAVLNode B) {   // right rotation; if B.BF +2, B.left.Bf = +1
         IAVLNode A = B.getLeft();
         IAVLNode B_Parent = B.getParent();
+        int num_of_height_changes = 0;
         A.setParent(B.getParent());
         B.setParent(A);
         A.getRight().setParent(B);
         B.setLeft(A.getRight());
         A.setRight(B);
-        updateHeight(B);
-        updateHeight(A);
+        num_of_height_changes += updateHeight(B);
+        num_of_height_changes += updateHeight(A);
         B.updateSize();
         A.updateSize();
         if (B_Parent == null) {
@@ -183,18 +193,20 @@ public class AVLTree {
         else {  //(B_Parent.getLeft()==B)
             B_Parent.setLeft(A);
         }
+        return num_of_height_changes;
     }
 
-    public void left(IAVLNode B) {   // left rotation; if B.BF +2, B.left.Bf = -1
+    public int left(IAVLNode B) {   // left rotation; if B.BF +2, B.left.Bf = -1
         IAVLNode A = B.getRight();
         IAVLNode B_Parent = B.getParent();
+        int num_of_height_changes = 0;
         A.setParent(B.getParent());
         B.setParent(A);
         A.getLeft().setParent(B);
         B.setRight(A.getLeft());
         A.setLeft(B);
-        updateHeight(B);
-        updateHeight(A);
+        num_of_height_changes += updateHeight(B);
+        num_of_height_changes += updateHeight(A);
         B.updateSize();
         A.updateSize();
         if (B_Parent == null) {
@@ -204,6 +216,7 @@ public class AVLTree {
         } else {  //(B_Parent.getLeft()==B)
             B_Parent.setLeft(A);
         }
+        return num_of_height_changes;
     }
 
 
@@ -220,6 +233,7 @@ public class AVLTree {
         IAVLNode deleted = search_node(k);
         IAVLNode fix_balance = deleted;
         int num_of_rotations = 0;
+        int num_of_height_changes = 0;
         if (deleted == null) {
             return -1;
         }
@@ -278,7 +292,7 @@ public class AVLTree {
                 else { // deleted is a left son
                     deleted_parent.setLeft(successor);
                 }
-                updateHeight(successor);
+                num_of_height_changes += updateHeight(successor);
                 successor.updateSize();
             }
             else {
@@ -301,7 +315,7 @@ public class AVLTree {
         IAVLNode size_update = fix_balance;
         while (fix_balance != null) {
             int old_height = fix_balance.getHeight();
-            updateHeight(fix_balance);
+            num_of_height_changes += updateHeight(fix_balance);
             int BF = balanceFactor(fix_balance);
             if (Math.abs(BF)<2 && old_height==fix_balance.getHeight()) {
                 break;
@@ -312,29 +326,29 @@ public class AVLTree {
             else {
                 if (BF == 2) {
                     if (balanceFactor(fix_balance.getLeft()) == 1 || balanceFactor(fix_balance.getLeft()) == 0) {
-                        right(fix_balance);
+                        num_of_height_changes += right(fix_balance);
                         num_of_rotations++;
                     } else { // node.left.BF == -1
-                        left(fix_balance.getLeft());
-                        right(fix_balance);
+                        num_of_height_changes += left(fix_balance.getLeft());
+                        num_of_height_changes += right(fix_balance);
                         num_of_rotations += 2;
                     }
                 }
                 else {  // Bf == -2
                     if (balanceFactor(fix_balance.getRight()) == -1 || balanceFactor(fix_balance.getRight()) == 0) {
-                        left(fix_balance);
+                        num_of_height_changes += left(fix_balance);
                         num_of_rotations++;
                     } else { // node.right.BF == +1
-                        right(fix_balance.getRight());
-                        left(fix_balance);
+                        num_of_height_changes += right(fix_balance.getRight());
+                        num_of_height_changes += left(fix_balance);
                         num_of_rotations += 2;
                     }
                 }
         }
         }
-        updateHeightFromBottom(fix_balance);
+        num_of_height_changes += updateHeightFromBottom(fix_balance);
         updateSizeFromBottom(fix_balance);
-        return num_of_rotations;
+        return num_of_rotations + num_of_height_changes;
     }
 
 // node.getRight!=null;
