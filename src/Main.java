@@ -23,7 +23,8 @@ public class Main {
         empty_tree.insert(10, "");
         AVLTree.IAVLNode node2 = tree.new AVLNode(8, "e");
         tree.join(node2, empty_tree);
-        System.out.println(tree);
+        AVLTree[] trees = tree.split(9);
+        System.out.println(trees);
     }
 
 

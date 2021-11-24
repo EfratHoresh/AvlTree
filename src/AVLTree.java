@@ -474,8 +474,10 @@ public class AVLTree {
      * Returns the number of nodes in the tree.
      */
     public int size() {
-        AVLNode root = (AVLNode) this.getRoot();
-        return root.size; // to be replaced by student code
+        if (this.empty()) {
+            return 0;
+        }
+        return this.getRoot().getSize(); // to be replaced by student code
     }
 
     /**
@@ -502,7 +504,43 @@ public class AVLTree {
          * postcondition: none
          */
     public AVLTree[] split(int x) {
-        return null;
+        IAVLNode node = search_node(x);
+        AVLTree T1 = new AVLTree();
+        AVLTree T2 = new AVLTree();
+        AVLTree[] trees = {T1, T2};
+        if (node.getLeft().getKey()!=-1) {
+            T1.root = node.getLeft();
+            T1.root.setParent(null);
+        }
+        if (node.getRight().getKey()!=-1) {
+            T2.root = node.getRight();
+            T2.root.setParent(null);
+        }
+        if (node.equals(this.root)) {
+            return trees;
+        }
+        IAVLNode prev_node = node;
+        node = node.getParent();
+        IAVLNode next_node = node.getParent();
+        AVLTree added_tree = new AVLTree();
+        while (node!=null) {
+            if (this.isRightSon(node, prev_node)) {
+                added_tree.root = node.getLeft();
+                added_tree.root.setParent(null);
+                T1.join(node, added_tree);
+            }
+            else {
+                added_tree.root = node.getRight();
+                added_tree.root.setParent(null);
+                T2.join(node, added_tree);
+            }
+            prev_node = node;
+            node = next_node;
+            if (next_node!=null) {
+                next_node = next_node.getParent();
+            }
+        }
+        return trees;
     }
 
 
@@ -520,9 +558,10 @@ public class AVLTree {
     public int join(IAVLNode x, AVLTree t) {
         // save original heights
         IAVLNode virtual_node = new AVLNode(-1, null);
+        x.setRight(virtual_node);
+        x.setLeft(virtual_node);
+        x.setParent(null);
         if (t.empty() && this.empty()) {
-            x.setRight(virtual_node);
-            x.setLeft(virtual_node);
             this.root = x;
             return 1;
         }
