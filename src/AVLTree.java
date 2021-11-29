@@ -591,9 +591,10 @@ public class AVLTree {
 
     public int join(IAVLNode x, AVLTree t) {
         // save original heights
-        IAVLNode virtual_node = new AVLNode(-1, null);
-        x.setRight(virtual_node);
-        x.setLeft(virtual_node);
+        IAVLNode virtual_node_left = new AVLNode(-1, null);
+        IAVLNode virtual_node_right = new AVLNode(-1, null);
+        x.setRight(virtual_node_right);
+        x.setLeft(virtual_node_left);
         x.setParent(null);
         if (t.empty() && this.empty()) {
             this.setRoot(x);
@@ -602,10 +603,10 @@ public class AVLTree {
         int t_height;
         int this_height;
         if (t.empty()) {
-            t.root = virtual_node;
+            t.root = virtual_node_left;
         }
         if (this.empty()) {
-            this.root = virtual_node;
+            this.root = virtual_node_right;
         }
         t_height = t.getTreeHeight();
         this_height = this.getTreeHeight();
