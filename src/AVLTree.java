@@ -571,6 +571,8 @@ public class AVLTree {
                 next_node = next_node.getParent();
             }
         }
+        T1.updateMinMax();
+        T2.updateMinMax();
         return trees;
     }
 
@@ -620,7 +622,7 @@ public class AVLTree {
 //        find min max
         if (tall_tree.getRoot().getKey() > x.getKey()) {
             this.max = tall_tree.max;
-            if (short_tree.min==null) {
+            if (short_tree.empty()) {
                 this.min = x;
             }
             else {
@@ -629,7 +631,7 @@ public class AVLTree {
         }
         else {
             this.min = tall_tree.min;
-            if (short_tree.max==null) {
+            if (short_tree.empty()) {
                 this.max = x;
             }
             else {
