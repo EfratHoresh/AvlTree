@@ -74,7 +74,8 @@ public class AVLTree {
             return -1;
         }
 //        creating new node and virtual sons
-        IAVLNode virtual_node = new AVLNode(-1, null);
+        IAVLNode virtual_node_left = new AVLNode(-1, null);
+        IAVLNode virtual_node_right = new AVLNode(-1, null);
         IAVLNode added_node = new AVLNode(k, i);
 //        update min amd max
         if (this.max == null || k > this.max.getKey()) {
@@ -84,8 +85,8 @@ public class AVLTree {
             this.min = added_node;
         }
         int num_of_height_changes = 0;
-        added_node.setLeft(virtual_node);
-        added_node.setRight(virtual_node);
+        added_node.setLeft(virtual_node_left);
+        added_node.setRight(virtual_node_right);
         if (this.empty()) {
             this.setRoot(added_node);
             return 0;

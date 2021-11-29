@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Main {
 
@@ -32,6 +34,37 @@ public class Main {
         info = trees[0].infoToArray();
         keys = trees[1].keysToArray();
         info = trees[1].infoToArray();
+
+        ArrayList<Integer> i1_ordered = new ArrayList<>();
+        ArrayList<Integer> i1_shuffled = new ArrayList<>();
+
+//        int[] test = {2,13,15,1,4,5,12,6,10,16,14,8,18,17,11,9};
+        int[] test = {2,13,15,1,4,5,12,6};
+        int j = 2000;
+
+        AVLTree testTree = new AVLTree();
+        for (int i=0; i< test.length;i++) {
+            testTree.insert(test[i], null);
+        }
+        testTree.insert(10, null);
+        for (int i=0; i<j;i++) {
+            i1_ordered.add(j-i);
+            i1_shuffled.add(j-i);
+        }
+
+        Collections.shuffle(i1_shuffled);
+
+        AVLTree i1_ordered_tree = new AVLTree();
+        AVLTree i1_shuffled_tree = new AVLTree();
+        int insert_cost_i1_ordered = 0;
+        int insert_cost_i1_shuffled = 0;
+        for (int key : i1_ordered) {
+            insert_cost_i1_ordered+= i1_ordered_tree.insert(key, null);
+        }
+        for (int key : i1_shuffled) {
+            System.out.println(key);
+            insert_cost_i1_shuffled+= i1_shuffled_tree.insert(key, null);
+        }
     }
 
 
