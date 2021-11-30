@@ -693,6 +693,95 @@ public class AVLTree {
         return Math.abs(this_height-t_height) + 1;
     }
 
+    public int insert_from_max(int k, String i) {
+//        creating new node and virtual sons
+        IAVLNode virtual_node = new AVLNode(-1, null);
+        IAVLNode added_node = new AVLNode(k, i);
+//        update min amd max
+        if (this.max == null || k > this.max.getKey()) {
+            this.max = added_node;
+        }
+        if (this.min == null || k < this.min.getKey()) {
+            this.min = added_node;
+        }
+        int num_of_edges = 0;
+        int num_of_height_changes = 0;
+        added_node.setLeft(virtual_node);
+        added_node.setRight(virtual_node);
+        if (this.empty()) {
+            this.setRoot(added_node);
+            return 0;
+        }
+//        finger search - finding k's place
+        IAVLNode node = this.max;
+        while (node.getParent()!=null) {
+            if (node.getKey() > k && node.getParent().getKey() < k) {
+                break;
+            }
+            node = node.getParent();
+            num_of_edges++;
+        }
+        node = node.getLeft();
+        num_of_edges++;
+        while (node.getKey() != -1) {
+            int node_key = node.getKey();
+            if (node_key > k) {
+                node = node.getLeft();
+                num_of_edges++;
+            }
+            if (node_key < k) {
+                node = node.getRight();
+                num_of_edges++;
+            }
+        }
+//        adding k
+        node = node.getParent();
+        num_of_edges++;
+        if (k < node.getKey()) {
+            node.setLeft(added_node);
+        } else {
+            node.setRight(added_node);
+        }
+//        starting rebalance
+        int num_of_rotations = 0;
+        while (node != null) {
+            int BF = balanceFactor(node);
+            if (BF==0) {
+                return 0;
+            }
+            else if (Math.abs(BF)==1) {
+                node.setHeight(node.getHeight()+1); //update height
+                num_of_height_changes++;
+                node = node.getParent();
+            }
+            else if (BF == 2) {
+                if (balanceFactor(node.getLeft()) == 1) {
+                    num_of_height_changes += right(node);
+                    num_of_rotations++;
+                } else { // node.left.BF == -1
+                    num_of_height_changes += left(node.getLeft());
+                    num_of_height_changes += right(node);
+                    num_of_rotations += 2;
+                }
+                break;
+            }
+            else {  // Bf == -2
+                if (balanceFactor(node.getRight()) == -1) {
+                    num_of_height_changes += left(node);
+                    num_of_rotations++;
+                } else { // node.right.BF == +1
+                    num_of_height_changes += right(node.getRight());
+                    num_of_height_changes += left(node);
+                    num_of_rotations += 2;
+                }
+                break;
+            }
+        }
+        updateSizeFromBottom(added_node);
+        return num_of_edges;
+    }
+
+
 
     /**
      * public interface IAVLNode
