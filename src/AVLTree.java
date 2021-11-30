@@ -168,7 +168,9 @@ public class AVLTree {
 
     public void setRoot(IAVLNode new_root) {
         this.root = new_root;
-        new_root.setParent(null);
+        if (new_root!=null) {
+            new_root.setParent(null);
+        }
         updateMinMax();
     }
 
@@ -185,6 +187,7 @@ public class AVLTree {
         if (this.empty()) {
             this.min = null;
             this.max = null;
+            return;
         }
         IAVLNode node = this.getRoot();
         while (node.getLeft().getKey()!=-1) {

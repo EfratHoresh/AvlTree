@@ -22,6 +22,8 @@ public class Q2 {
         AVLTree t9_max_left = new AVLTree();
         AVLTree t10_max_left = new AVLTree();
 
+
+
         for (int i=0;i<2000;i++) {
             t1_random.insert(i, null);
             t1_max_left.insert(i, null);

@@ -131,12 +131,13 @@ public class Q1 {
         int i4_changes_ordered = 0;
         int i5_changes_ordered = 0;
 
+
         for (int i=0;i<i1_ordered_from_bottom.length;i++) {
             for (int j=i+1;j<i1_ordered_from_bottom.length;j++) {
-                if (i1_ordered_from_bottom[i]!=i1_shuffled.get(j)) {
+                if (i1_ordered_from_bottom[i]>i1_shuffled.get(j)) {
                     i1_changes_shuffle++;
                 }
-                if (i1_ordered_from_bottom[i]!=i1_ordered.get(j)) {
+                if (i1_ordered_from_bottom[i]<i1_ordered.get(j)) {
                     i1_changes_ordered++;
                 }
             }
@@ -144,10 +145,10 @@ public class Q1 {
 
         for (int i=0;i<i2_ordered_from_bottom.length;i++) {
             for (int j=i+1;j<i2_ordered_from_bottom.length;j++) {
-                if (i2_ordered_from_bottom[i]!=i2_shuffled.get(j)) {
+                if (i2_ordered_from_bottom[i]<i2_shuffled.get(j)) {
                     i2_changes_shuffle++;
                 }
-                if (i2_ordered_from_bottom[i]!=i2_ordered.get(j)) {
+                if (i2_ordered_from_bottom[i]<i2_ordered.get(j)) {
                     i2_changes_ordered++;
                 }
             }
@@ -155,10 +156,10 @@ public class Q1 {
 
         for (int i=0;i<i3_ordered_from_bottom.length;i++) {
             for (int j=i+1;j<i3_ordered_from_bottom.length;j++) {
-                if (i3_ordered_from_bottom[i]!=i3_shuffled.get(j)) {
+                if (i3_ordered_from_bottom[i]<i3_shuffled.get(j)) {
                     i3_changes_shuffle++;
                 }
-                if (i3_ordered_from_bottom[i]!=i3_ordered.get(j)) {
+                if (i3_ordered_from_bottom[i]<i3_ordered.get(j)) {
                     i3_changes_ordered++;
                 }
             }
@@ -166,10 +167,10 @@ public class Q1 {
 
         for (int i=0;i<i4_ordered_from_bottom.length;i++) {
             for (int j=i+1;j<i4_ordered_from_bottom.length;j++) {
-                if (i4_ordered_from_bottom[i]!=i4_shuffled.get(j)) {
+                if (i4_ordered_from_bottom[i]<i4_shuffled.get(j)) {
                     i4_changes_shuffle++;
                 }
-                if (i4_ordered_from_bottom[i]!=i4_ordered.get(j)) {
+                if (i4_ordered_from_bottom[i]<i4_ordered.get(j)) {
                     i4_changes_ordered++;
                 }
             }
@@ -177,10 +178,10 @@ public class Q1 {
 
         for (int i=0;i<i5_ordered_from_bottom.length;i++) {
             for (int j=i+1;j<i5_ordered_from_bottom.length;j++) {
-                if (i5_ordered_from_bottom[i]!=i5_shuffled.get(j)) {
+                if (i5_ordered_from_bottom[i]<i5_shuffled.get(j)) {
                     i5_changes_shuffle++;
                 }
-                if (i5_ordered_from_bottom[i]!=i5_ordered.get(j)) {
+                if (i5_ordered_from_bottom[i]<i5_ordered.get(j)) {
                     i5_changes_ordered++;
                 }
             }
