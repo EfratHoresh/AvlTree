@@ -62,9 +62,14 @@ public class Main {
             insert_cost_i1_ordered+= i1_ordered_tree.insert(key, null);
         }
         for (int key : i1_shuffled) {
-            System.out.println(key);
             insert_cost_i1_shuffled+= i1_shuffled_tree.insert(key, null);
         }
+
+        double logs = 0;
+        for (int i=2; i<=8000; i++) {
+            logs+=2*Math.log(i-1);
+        }
+        System.out.println(logs);
     }
 
 

@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+
 public class Q2 {
     public static void main(String[] args) {
 //        create tree
@@ -22,58 +26,161 @@ public class Q2 {
         AVLTree t9_max_left = new AVLTree();
         AVLTree t10_max_left = new AVLTree();
 
+        ArrayList<Integer> i1 = new ArrayList<>();
+        ArrayList<Integer> i2 = new ArrayList<>();
+        ArrayList<Integer> i3 = new ArrayList<>();
+        ArrayList<Integer> i4 = new ArrayList<>();
+        ArrayList<Integer> i5 = new ArrayList<>();
+        ArrayList<Integer> i6 = new ArrayList<>();
+        ArrayList<Integer> i7 = new ArrayList<>();
+        ArrayList<Integer> i8 = new ArrayList<>();
+        ArrayList<Integer> i9 = new ArrayList<>();
+        ArrayList<Integer> i10 = new ArrayList<>();
 
 
         for (int i=0;i<2000;i++) {
-            t1_random.insert(i, null);
-            t1_max_left.insert(i, null);
+            i1.add(i);
         }
 
         for (int i=0;i<4000;i++) {
-            t2_random.insert(i, null);
-            t2_max_left.insert(i, null);
+            i2.add(i);
         }
 
         for (int i=0;i<8000;i++) {
-            t3_random.insert(i, null);
-            t3_max_left.insert(i, null);
+            i3.add(i);
         }
 
         for (int i=0;i<16000;i++) {
-            t4_random.insert(i, null);
-            t4_max_left.insert(i, null);
+            i4.add(i);
         }
 
         for (int i=0;i<32000;i++) {
-            t5_random.insert(i, null);
-            t5_max_left.insert(i, null);
+            i5.add(i);
         }
 
         for (int i=0;i<64000;i++) {
-            t6_random.insert(i, null);
-            t6_max_left.insert(i, null);
+            i6.add(i);
         }
 
         for (int i=0;i<128000;i++) {
-            t7_random.insert(i, null);
-            t7_max_left.insert(i, null);
+            i7.add(i);
         }
 
         for (int i=0;i<256000;i++) {
-            t8_random.insert(i, null);
-            t8_max_left.insert(i, null);
+            i8.add(i);
         }
 
         for (int i=0;i<512000;i++) {
-            t9_random.insert(i, null);
-            t9_max_left.insert(i, null);
+            i9.add(i);
         }
 
         for (int i=0;i<1024000;i++) {
-            t10_random.insert(i, null);
-            t10_max_left.insert(i, null);
+            i10.add(i);
         }
 
+        Collections.shuffle(i1);
+        Collections.shuffle(i2);
+        Collections.shuffle(i3);
+        Collections.shuffle(i4);
+        Collections.shuffle(i5);
+        Collections.shuffle(i6);
+        Collections.shuffle(i7);
+        Collections.shuffle(i8);
+        Collections.shuffle(i9);
+        Collections.shuffle(i10);
+
+        for (Integer key: i1) {
+            t1_random.insert(key, null);
+            t1_max_left.insert(key, null);
+        }
+
+
+        for (Integer key: i2) {
+            t2_random.insert(key, null);
+            t2_max_left.insert(key, null);
+        }
+
+
+        for (Integer key: i3) {
+            t3_random.insert(key, null);
+            t3_max_left.insert(key, null);
+        }
+
+
+        for (Integer key: i4) {
+            t4_random.insert(key, null);
+            t4_max_left.insert(key, null);
+        }
+
+
+        for (Integer key: i5) {
+            t5_random.insert(key, null);
+            t5_max_left.insert(key, null);
+        }
+
+
+        for (Integer key: i6) {
+            t6_random.insert(key, null);
+            t6_max_left.insert(key, null);
+        }
+
+
+        for (Integer key: i7) {
+            t7_random.insert(key, null);
+            t7_max_left.insert(key, null);
+        }
+
+
+        for (Integer key: i8) {
+            t8_random.insert(key, null);
+            t8_max_left.insert(key, null);
+        }
+
+
+        for (Integer key: i9) {
+            t9_random.insert(key, null);
+            t9_max_left.insert(key, null);
+        }
+
+
+        for (Integer key: i10) {
+            t10_random.insert(key, null);
+            t10_max_left.insert(key, null);
+        }
+
+        Random random = new Random();
+        int t1_random_key = random.nextInt(2000);
+        int t2_random_key = random.nextInt(4000);
+        int t3_random_key = random.nextInt(8000);
+        int t4_random_key = random.nextInt(16000);
+        int t5_random_key = random.nextInt(32000);
+        int t6_random_key = random.nextInt(64000);
+        int t7_random_key = random.nextInt(128000);
+        int t8_random_key = random.nextInt(256000);
+        int t9_random_key = random.nextInt(512000);
+        int t10_random_key = random.nextInt(1024000);
+
+        int t1_random_cost = t1_random.splitCost(t1_random_key);
+        int t2_random_cost = t2_random.splitCost(t2_random_key);
+        int t3_random_cost = t3_random.splitCost(t3_random_key);
+        int t4_random_cost = t4_random.splitCost(t4_random_key);
+        int t5_random_cost = t5_random.splitCost(t5_random_key);
+        int t6_random_cost = t6_random.splitCost(t6_random_key);
+        int t7_random_cost = t7_random.splitCost(t7_random_key);
+        int t8_random_cost = t8_random.splitCost(t8_random_key);
+        int t9_random_cost = t9_random.splitCost(t9_random_key);
+        int t10_random_cost = t10_random.splitCost(t10_random_key);
+
+        System.out.println("t1 random cost = " + t1_random_cost);
+        System.out.println("t2 random cost = " + t2_random_cost);
+        System.out.println("t3 random cost = " + t3_random_cost);
+        System.out.println("t4 random cost = " + t4_random_cost);
+        System.out.println("t5 random cost = " + t5_random_cost);
+        System.out.println("t6 random cost = " + t6_random_cost);
+        System.out.println("t7 random cost = " + t7_random_cost);
+        System.out.println("t8 random cost = " + t8_random_cost);
+        System.out.println("t9 random cost = " + t9_random_cost);
+        System.out.println("t10 random cost = " + t10_random_cost);
 
     }
 }

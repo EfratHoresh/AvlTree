@@ -580,6 +580,49 @@ public class AVLTree {
         return trees;
     }
 
+    public int splitCost(int x) {
+        IAVLNode node = search_node(x);
+        AVLTree T1 = new AVLTree();
+        AVLTree T2 = new AVLTree();
+        int cost = 0;
+        AVLTree[] trees = {T1, T2};
+        if (node.getLeft().getKey()!=-1) {
+            T1.root = node.getLeft();
+            T1.root.setParent(null);
+        }
+        if (node.getRight().getKey()!=-1) {
+            T2.root = node.getRight();
+            T2.root.setParent(null);
+        }
+        if (node.equals(this.root)) {
+            T1.updateMinMax();
+            T2.updateMinMax();
+            return 0;
+        }
+        IAVLNode prev_node = node;
+        node = node.getParent();
+        IAVLNode next_node = node.getParent();
+        AVLTree added_tree = new AVLTree();
+        while (node!=null) {
+            if (this.isRightSon(node, prev_node)) {
+                added_tree.setRoot(node.getLeft());
+                cost+= T1.join(node, added_tree);
+            }
+            else {
+                added_tree.setRoot(node.getRight());
+                cost+=T2.join(node, added_tree);
+            }
+            prev_node = node;
+            node = next_node;
+            if (next_node!=null) {
+                next_node = next_node.getParent();
+            }
+        }
+        T1.updateMinMax();
+        T2.updateMinMax();
+        return cost;
+    }
+
 
     /**
      * public int join(IAVLNode x, AVLTree t)
