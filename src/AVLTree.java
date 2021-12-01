@@ -114,7 +114,7 @@ public class AVLTree {
         while (node != null) {
             int BF = balanceFactor(node);
             if (BF==0) {
-                return 0;
+                break;
             }
             else if (Math.abs(BF)==1) {
                 node.setHeight(node.getHeight()+1); //update height
@@ -214,9 +214,9 @@ public class AVLTree {
         IAVLNode A = B.getLeft();
         IAVLNode B_Parent = B.getParent();
         int num_of_height_changes = 0;
-        A.setParent(B.getParent());
-        B.setParent(A);
-        A.getRight().setParent(B);
+//        A.setParent(B.getParent());
+//        B.setParent(A);
+//        A.getRight().setParent(B);
         B.setLeft(A.getRight());
         A.setRight(B);
         num_of_height_changes += updateHeight(B);
@@ -225,8 +225,9 @@ public class AVLTree {
         A.updateSize();
         if (B_Parent == null) {
             this.root = A;
+            A.setParent(null);
         }
-        else if (B_Parent.getRight()==B) {
+        else if (isRightSon(B_Parent,B)) {
             B_Parent.setRight(A);
         }
         else {  //(B_Parent.getLeft()==B)
@@ -239,9 +240,9 @@ public class AVLTree {
         IAVLNode A = B.getRight();
         IAVLNode B_Parent = B.getParent();
         int num_of_height_changes = 0;
-        A.setParent(B.getParent());
-        B.setParent(A);
-        A.getLeft().setParent(B);
+//        A.setParent(B.getParent());
+//        B.setParent(A);
+//        A.getLeft().setParent(B);
         B.setRight(A.getLeft());
         A.setLeft(B);
         num_of_height_changes += updateHeight(B);
@@ -250,7 +251,8 @@ public class AVLTree {
         A.updateSize();
         if (B_Parent == null) {
             this.root = A;
-        } else if (B_Parent.getRight() == B) {
+            A.setParent(null);
+        } else if (isRightSon(B_Parent,B)) {
             B_Parent.setRight(A);
         } else {  //(B_Parent.getLeft()==B)
             B_Parent.setLeft(A);
@@ -307,7 +309,7 @@ public class AVLTree {
         else if (deleted.getLeft().getKey() == -1) { // only right son
             if (deleted_parent == null) {
                 deleted.getRight().setParent(null);
-                this.root = deleted.getRight(); // return? or take care of height?
+                this.root = deleted.getRight(); //
             } else {
                 fix_balance = deleted_parent;
                 if (isRightSon(deleted_parent, deleted)) { //deleted is a right son
@@ -562,12 +564,22 @@ public class AVLTree {
         AVLTree added_tree = new AVLTree();
         while (node!=null) {
             if (this.isRightSon(node, prev_node)) {
-                added_tree.setRoot(node.getLeft());
+                if (node.getLeft().getKey()!=-1) {
+                    added_tree.setRoot(node.getLeft());
+                }
+                else {
+                    added_tree.setRoot(null);
+                }
                 T1.join(node, added_tree);
             }
             else {
-                added_tree.setRoot(node.getRight());
-                T2.join(node, added_tree);
+                if (node.getRight().getKey()!=-1) {
+                    added_tree.setRoot(node.getRight());
+                }
+                else {
+                    added_tree.setRoot(null);
+                }
+                    T2.join(node, added_tree);
             }
             prev_node = node;
             node = next_node;
@@ -605,11 +617,21 @@ public class AVLTree {
         AVLTree added_tree = new AVLTree();
         while (node!=null) {
             if (this.isRightSon(node, prev_node)) {
-                added_tree.setRoot(node.getLeft());
+                if (node.getLeft().getKey()!=-1) {
+                    added_tree.setRoot(node.getLeft());
+                }
+                else {
+                    added_tree.setRoot(null);
+                }
                 cost+= T1.join(node, added_tree);
             }
             else {
-                added_tree.setRoot(node.getRight());
+                if (node.getRight().getKey()!=-1) {
+                    added_tree.setRoot(node.getRight());
+                }
+                else {
+                    added_tree.setRoot(null);
+                }
                 cost+=T2.join(node, added_tree);
             }
             prev_node = node;
@@ -793,7 +815,7 @@ public class AVLTree {
         while (node != null) {
             int BF = balanceFactor(node);
             if (BF==0) {
-                return 0;
+                break;
             }
             else if (Math.abs(BF)==1) {
                 node.setHeight(node.getHeight()+1); //update height

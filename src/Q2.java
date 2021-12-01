@@ -42,6 +42,7 @@ public class Q2 {
             i1.add(i);
         }
 
+
         for (int i=0;i<4000;i++) {
             i2.add(i);
         }
@@ -93,7 +94,8 @@ public class Q2 {
             t1_random.insert(key, null);
             t1_max_left.insert(key, null);
         }
-
+//        t1_random.delete(t1_random.getRoot().getKey());
+//        System.out.println(t1_random.size());
 
         for (Integer key: i2) {
             t2_random.insert(key, null);
@@ -171,6 +173,7 @@ public class Q2 {
         int t9_random_cost = t9_random.splitCost(t9_random_key);
         int t10_random_cost = t10_random.splitCost(t10_random_key);
 
+
         System.out.println("t1 random cost = " + t1_random_cost);
         System.out.println("t2 random cost = " + t2_random_cost);
         System.out.println("t3 random cost = " + t3_random_cost);
@@ -182,5 +185,19 @@ public class Q2 {
         System.out.println("t9 random cost = " + t9_random_cost);
         System.out.println("t10 random cost = " + t10_random_cost);
 
+        int t1_max_cost = t1_max_left.splitCost(findMaxLeft(t1_max_left));
+        t1_max_left.split(findMaxLeft(t1_max_left));
+        System.out.println("t1 max cost = " + t1_max_cost);
+
     }
+
+    public static int findMaxLeft(AVLTree tree) {
+        AVLTree.IAVLNode node = tree.getRoot();
+        node = node.getLeft();
+        while (node.getRight().getKey()!=-1) {
+            node = node.getRight();
+        }
+        return node.getKey();
+    }
+
 }
