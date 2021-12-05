@@ -592,11 +592,14 @@ public class AVLTree {
         return trees;
     }
 
-    public int splitCost(int x) {
+    public double[] splitCost(int x) {
+        double[] cost = new double[2]; // [average cost, max cost]
         IAVLNode node = search_node(x);
         AVLTree T1 = new AVLTree();
         AVLTree T2 = new AVLTree();
-        int cost = 0;
+        double overall_cost = 0.;
+        double num_of_joins = 0.;
+        double max_cost = 0.;
         AVLTree[] trees = {T1, T2};
         if (node.getLeft().getKey()!=-1) {
             T1.root = node.getLeft();
@@ -609,12 +612,13 @@ public class AVLTree {
         if (node.equals(this.root)) {
             T1.updateMinMax();
             T2.updateMinMax();
-            return 0;
+            return cost;
         }
         IAVLNode prev_node = node;
         node = node.getParent();
         IAVLNode next_node = node.getParent();
         AVLTree added_tree = new AVLTree();
+        int join_cost = 0;
         while (node!=null) {
             if (this.isRightSon(node, prev_node)) {
                 if (node.getLeft().getKey()!=-1) {
@@ -623,7 +627,12 @@ public class AVLTree {
                 else {
                     added_tree.setRoot(null);
                 }
-                cost+= T1.join(node, added_tree);
+                join_cost = T1.join(node, added_tree);
+                num_of_joins++;
+                overall_cost+=join_cost;
+                if (max_cost<join_cost) {
+                    max_cost = join_cost;
+                }
             }
             else {
                 if (node.getRight().getKey()!=-1) {
@@ -632,7 +641,12 @@ public class AVLTree {
                 else {
                     added_tree.setRoot(null);
                 }
-                cost+=T2.join(node, added_tree);
+                join_cost=T2.join(node, added_tree);
+                num_of_joins++;
+                overall_cost+=join_cost;
+                if (max_cost<join_cost) {
+                    max_cost = join_cost;
+                }
             }
             prev_node = node;
             node = next_node;
@@ -640,6 +654,8 @@ public class AVLTree {
                 next_node = next_node.getParent();
             }
         }
+        cost[0] = overall_cost/ num_of_joins;
+        cost[1] = max_cost;
         T1.updateMinMax();
         T2.updateMinMax();
         return cost;
@@ -659,10 +675,8 @@ public class AVLTree {
 
     public int join(IAVLNode x, AVLTree t) {
         // save original heights
-        IAVLNode virtual_node_left = new AVLNode(-1, null);
-        IAVLNode virtual_node_right = new AVLNode(-1, null);
-        x.setRight(virtual_node_right);
-        x.setLeft(virtual_node_left);
+        x.setRight(new AVLNode(-1, null));
+        x.setLeft(new AVLNode(-1, null));
         x.setParent(null);
         if (t.empty() && this.empty()) {
             this.setRoot(x);
@@ -671,10 +685,10 @@ public class AVLTree {
         int t_height;
         int this_height;
         if (t.empty()) {
-            t.root = virtual_node_left;
+            t.setRoot(new AVLNode(-1, null));
         }
         if (this.empty()) {
-            this.root = virtual_node_right;
+            this.setRoot(new AVLNode(-1, null));
         }
         t_height = t.getTreeHeight();
         this_height = this.getTreeHeight();

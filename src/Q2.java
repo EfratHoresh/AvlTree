@@ -162,32 +162,54 @@ public class Q2 {
         int t9_random_key = random.nextInt(512000);
         int t10_random_key = random.nextInt(1024000);
 
-        int t1_random_cost = t1_random.splitCost(t1_random_key);
-        int t2_random_cost = t2_random.splitCost(t2_random_key);
-        int t3_random_cost = t3_random.splitCost(t3_random_key);
-        int t4_random_cost = t4_random.splitCost(t4_random_key);
-        int t5_random_cost = t5_random.splitCost(t5_random_key);
-        int t6_random_cost = t6_random.splitCost(t6_random_key);
-        int t7_random_cost = t7_random.splitCost(t7_random_key);
-        int t8_random_cost = t8_random.splitCost(t8_random_key);
-        int t9_random_cost = t9_random.splitCost(t9_random_key);
-        int t10_random_cost = t10_random.splitCost(t10_random_key);
+        double[] t1_random_cost = t1_random.splitCost(t1_random_key);
+        double[] t2_random_cost = t2_random.splitCost(t2_random_key);
+        double[] t3_random_cost = t3_random.splitCost(t3_random_key);
+        double[] t4_random_cost = t4_random.splitCost(t4_random_key);
+        double[] t5_random_cost = t5_random.splitCost(t5_random_key);
+        double[] t6_random_cost = t6_random.splitCost(t6_random_key);
+        double[] t7_random_cost = t7_random.splitCost(t7_random_key);
+        double[] t8_random_cost = t8_random.splitCost(t8_random_key);
+        double[] t9_random_cost = t9_random.splitCost(t9_random_key);
+        double[] t10_random_cost = t10_random.splitCost(t10_random_key);
 
 
-        System.out.println("t1 random cost = " + t1_random_cost);
-        System.out.println("t2 random cost = " + t2_random_cost);
-        System.out.println("t3 random cost = " + t3_random_cost);
-        System.out.println("t4 random cost = " + t4_random_cost);
-        System.out.println("t5 random cost = " + t5_random_cost);
-        System.out.println("t6 random cost = " + t6_random_cost);
-        System.out.println("t7 random cost = " + t7_random_cost);
-        System.out.println("t8 random cost = " + t8_random_cost);
-        System.out.println("t9 random cost = " + t9_random_cost);
-        System.out.println("t10 random cost = " + t10_random_cost);
+        System.out.println("t1 random average = " +t1_random_cost[0] +" random max = "+t1_random_cost[1]);
+        System.out.println("t2 random average = " +t2_random_cost[0] +" random max = "+t2_random_cost[1]);
+        System.out.println("t3 random average = " +t3_random_cost[0] +" random max = "+t3_random_cost[1]);
+        System.out.println("t4 random average = " +t4_random_cost[0] +" random max = "+t4_random_cost[1]);
+        System.out.println("t5 random average = " +t5_random_cost[0] +" random max = "+t5_random_cost[1]);
+        System.out.println("t6 random average = " +t6_random_cost[0] +" random max = "+t6_random_cost[1]);
+        System.out.println("t7 random average = " +t7_random_cost[0] +" random max = "+t7_random_cost[1]);
+        System.out.println("t8 random average = " +t8_random_cost[0] +" random max = "+t8_random_cost[1]);
+        System.out.println("t9 random average = " +t9_random_cost[0] +" random max = "+t9_random_cost[1]);
+        System.out.println("t10 random average = " +t10_random_cost[0] +" random max = "+t10_random_cost[1]);
 
-        int t1_max_cost = t1_max_left.splitCost(findMaxLeft(t1_max_left));
-        t1_max_left.split(findMaxLeft(t1_max_left));
-        System.out.println("t1 max cost = " + t1_max_cost);
+        double[] t1_max_cost = t1_max_left.splitCost(findMaxLeft(t1_max_left));
+        double[] t2_max_cost = t2_max_left.splitCost(findMaxLeft(t2_max_left));
+        double[] t3_max_cost = t3_max_left.splitCost(findMaxLeft(t3_max_left));
+        double[] t4_max_cost = t4_max_left.splitCost(findMaxLeft(t4_max_left));
+        double[] t5_max_cost = t5_max_left.splitCost(findMaxLeft(t5_max_left));
+        double[] t6_max_cost = t6_max_left.splitCost(findMaxLeft(t6_max_left));
+        double[] t7_max_cost = t7_max_left.splitCost(findMaxLeft(t7_max_left));
+        double[] t8_max_cost = t8_max_left.splitCost(findMaxLeft(t8_max_left));
+        double[] t9_max_cost = t9_max_left.splitCost(findMaxLeft(t9_max_left));
+        double[] t10_max_cost = t10_max_left.splitCost(findMaxLeft(t10_max_left));
+
+
+
+        System.out.println("t1 max average = " + t1_max_cost[0] + " max max = " + t1_max_cost[1]);
+        System.out.println("t2 max average = " + t2_max_cost[0] + " max max = " + t2_max_cost[1]);
+        System.out.println("t3 max average = " + t3_max_cost[0] + " max max = " + t3_max_cost[1]);
+        System.out.println("t4 max average = " + t4_max_cost[0] + " max max = " + t4_max_cost[1]);
+        System.out.println("t5 max average = " + t5_max_cost[0] + " max max = " + t5_max_cost[1]);
+        System.out.println("t6 max average = " + t6_max_cost[0] + " max max = " + t6_max_cost[1]);
+        System.out.println("t7 max average = " + t7_max_cost[0] + " max max = " + t7_max_cost[1]);
+        System.out.println("t8 max average = " + t8_max_cost[0] + " max max = " + t8_max_cost[1]);
+        System.out.println("t9 max average = " + t9_max_cost[0] + " max max = " + t9_max_cost[1]);
+        System.out.println("t10 max average = " + t10_max_cost[0] + " max max = " + t10_max_cost[1]);
+
+
 
     }
 
