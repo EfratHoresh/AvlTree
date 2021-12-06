@@ -84,32 +84,32 @@ public class Q1 {
             insert_cost_i1_ordered+= i1_ordered_tree.insert_from_max(key, null);
         }
         for (int key : i1_shuffled) {
-            insert_cost_i1_shuffled+= i1_shuffled_tree.insert(key, null);
+            insert_cost_i1_shuffled+= i1_shuffled_tree.insert_from_max(key, null);
         }
 
         for (int key : i2_ordered) {
             insert_cost_i2_ordered+= i2_ordered_tree.insert_from_max(key, null);
         }
         for (int key : i2_shuffled) {
-            insert_cost_i2_shuffled+= i2_shuffled_tree.insert(key, null);
+            insert_cost_i2_shuffled+= i2_shuffled_tree.insert_from_max(key, null);
         }
         for (int key : i3_ordered) {
             insert_cost_i3_ordered+= i3_ordered_tree.insert_from_max(key, null);
         }
         for (int key : i3_shuffled) {
-            insert_cost_i3_shuffled+= i3_shuffled_tree.insert(key, null);
+            insert_cost_i3_shuffled+= i3_shuffled_tree.insert_from_max(key, null);
         }
         for (int key : i4_ordered) {
             insert_cost_i4_ordered+= i4_ordered_tree.insert_from_max(key, null);
         }
         for (int key : i4_shuffled) {
-            insert_cost_i4_shuffled+= i4_shuffled_tree.insert(key, null);
+            insert_cost_i4_shuffled+= i4_shuffled_tree.insert_from_max(key, null);
         }
         for (int key : i5_ordered) {
             insert_cost_i5_ordered+= i5_ordered_tree.insert_from_max(key, null);
         }
         for (int key : i5_shuffled) {
-            insert_cost_i5_shuffled+= i5_shuffled_tree.insert(key, null);
+            insert_cost_i5_shuffled+= i5_shuffled_tree.insert_from_max(key, null);
         }
 
         int[] i1_ordered_from_bottom = i1_ordered_tree.keysToArray();

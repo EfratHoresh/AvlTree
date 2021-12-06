@@ -25,7 +25,7 @@ public class AVLTree {
      * Returns true if and only if the tree is empty.
      */
     public boolean empty() {
-        return (this.getRoot() == null);
+        return (this.getRoot() == null || !this.getRoot().isRealNode());
     }
 
     /**
@@ -35,7 +35,7 @@ public class AVLTree {
      * otherwise, returns null.
      */
     public String search(int k) {
-        IAVLNode node = search_node(k);
+        IAVLNode node = searchNode(k);
         if (node==null) {
             return null;
         }
@@ -43,7 +43,7 @@ public class AVLTree {
     }
 
 
-    public IAVLNode search_node(int k) {
+    public IAVLNode searchNode(int k) {
         IAVLNode node = this.getRoot();
         while (node != null) {
             int node_key = node.getKey();
@@ -271,7 +271,7 @@ public class AVLTree {
      * Returns -1 if an item with key k was not found in the tree.
      */
     public int delete(int k) {
-        IAVLNode deleted = search_node(k);
+        IAVLNode deleted = searchNode(k);
         IAVLNode fix_balance = deleted;
         int num_of_rotations = 0;
         int num_of_height_changes = 0;
@@ -541,7 +541,7 @@ public class AVLTree {
          * postcondition: none
          */
     public AVLTree[] split(int x) {
-        IAVLNode node = search_node(x);
+        IAVLNode node = searchNode(x);
         AVLTree T1 = new AVLTree();
         AVLTree T2 = new AVLTree();
         AVLTree[] trees = {T1, T2};
@@ -594,7 +594,7 @@ public class AVLTree {
 
     public double[] splitCost(int x) {
         double[] cost = new double[2]; // [average cost, max cost]
-        IAVLNode node = search_node(x);
+        IAVLNode node = searchNode(x);
         AVLTree T1 = new AVLTree();
         AVLTree T2 = new AVLTree();
         double overall_cost = 0.;
@@ -703,25 +703,27 @@ public class AVLTree {
             tall_tree = t;
         }
         IAVLNode h_node = tall_tree.getRoot();
-//        find min max
-        if (tall_tree.getRoot().getKey() > x.getKey()) {
-            this.max = tall_tree.max;
-            if (short_tree.empty()) {
-                this.min = x;
-            }
-            else {
-                this.min = short_tree.min;
-            }
-        }
-        else {
-            this.min = tall_tree.min;
-            if (short_tree.empty()) {
-                this.max = x;
-            }
-            else {
-                this.max = short_tree.max;
-            }
-        }
+//        update min max
+        IAVLNode[] minArray = {x, this.min, t.min};
+        IAVLNode[] maxArray = {x, this.max, t.max};
+//        if (tall_tree.getRoot().getKey() > x.getKey()) {
+//            this.max = tall_tree.max;
+//            if (short_tree.empty()) {
+//                this.min = x;
+//            }
+//            else {
+//                this.min = short_tree.min;
+//            }
+//        }
+//        else {
+//            this.min = tall_tree.min;
+//            if (short_tree.empty()) {
+//                this.max = x;
+//            }
+//            else {
+//                this.max = short_tree.max;
+//            }
+//        }
         if (tall_tree.getRoot().getKey() > x.getKey()) {
             while (h_node.getHeight() > short_tree.getTreeHeight()) {
                 h_node = h_node.getLeft();
@@ -771,40 +773,55 @@ public class AVLTree {
         this.root = x;
         x.updateSize();
         this.updateHeight(x);
-        this.updateMinMax();
+        IAVLNode temp_min = minArray[0];
+        for (IAVLNode node : minArray) {
+            if (node!=null && node.getKey() < temp_min.getKey()) {
+               temp_min = node;
+            }
+        }
+        this.min = temp_min;
+        IAVLNode temp_max = maxArray[0];
+        for (IAVLNode node : maxArray) {
+            if (node!=null && node.getKey() > temp_max.getKey()) {
+                temp_max = node;
+            }
+        }
+        this.max = temp_max;
         return Math.abs(this_height-t_height) + 1;
     }
 
     public int insert_from_max(int k, String i) {
 //        creating new node and virtual sons
-        IAVLNode virtual_node = new AVLNode(-1, null);
+        IAVLNode virtual_node_left = new AVLNode(-1, null);
+        IAVLNode virtual_node_right = new AVLNode(-1, null);
         IAVLNode added_node = new AVLNode(k, i);
 //        update min amd max
-        if (this.max == null || k > this.max.getKey()) {
-            this.max = added_node;
-        }
-        if (this.min == null || k < this.min.getKey()) {
-            this.min = added_node;
-        }
+//        if (this.max == null || k > this.max.getKey()) {
+//            this.max = added_node;
+//        }
+//        if (this.min == null || k < this.min.getKey()) {
+//            this.min = added_node;
+//        }
         int num_of_edges = 0;
         int num_of_height_changes = 0;
-        added_node.setLeft(virtual_node);
-        added_node.setRight(virtual_node);
+        added_node.setLeft(virtual_node_left);
+        added_node.setRight(virtual_node_right);
         if (this.empty()) {
             this.setRoot(added_node);
-            return 0;
+            return 1;
         }
 //        finger search - finding k's place
         IAVLNode node = this.max;
+//        num_of_edges++;
         while (node.getParent()!=null) {
-            if (node.getKey() > k && node.getParent().getKey() < k) {
+            if (node.getParent().getKey() < k) {
                 break;
             }
             node = node.getParent();
             num_of_edges++;
         }
-        node = node.getLeft();
-        num_of_edges++;
+//        node = node.getLeft();
+//        num_of_edges++;
         while (node.getKey() != -1) {
             int node_key = node.getKey();
             if (node_key > k) {
@@ -818,7 +835,7 @@ public class AVLTree {
         }
 //        adding k
         node = node.getParent();
-        num_of_edges++;
+        num_of_edges++;  //???????????????
         if (k < node.getKey()) {
             node.setLeft(added_node);
         } else {

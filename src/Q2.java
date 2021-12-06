@@ -162,6 +162,7 @@ public class Q2 {
         int t9_random_key = random.nextInt(512000);
         int t10_random_key = random.nextInt(1024000);
 
+
         double[] t1_random_cost = t1_random.splitCost(t1_random_key);
         double[] t2_random_cost = t2_random.splitCost(t2_random_key);
         double[] t3_random_cost = t3_random.splitCost(t3_random_key);
