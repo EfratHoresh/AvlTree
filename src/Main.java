@@ -25,6 +25,7 @@ public class Main {
         empty_tree.insert(10, "ten");
         AVLTree.IAVLNode node2 = tree.new AVLNode(8, "eight");
         tree.join(node2, empty_tree);
+        int chaeck = tree.delete(10);
         int[] keys = tree.keysToArray();
         String[] info = tree.infoToArray();
         AVLTree[] trees = tree.split(9);

@@ -1,3 +1,12 @@
+// UserName: InbalPearl
+// ID: 318657871
+// Name: Inbal Pearl
+
+// UserName: EfratPorten
+// ID: 318348992
+// Name: Efrat Horesh
+
+
 /**
  *
  * AVLTree
@@ -93,7 +102,7 @@ public class AVLTree {
         }
 //        finding k's place
         IAVLNode node = this.getRoot();
-        while (node.getKey() != -1) {
+        while (node.isRealNode()) {
             int node_key = node.getKey();
             if (node_key > k) {
                 node = node.getLeft();
@@ -190,12 +199,12 @@ public class AVLTree {
             return;
         }
         IAVLNode node = this.getRoot();
-        while (node.getLeft().getKey()!=-1) {
+        while (node.getLeft().isRealNode()) {
             node = node.getLeft();
         }
         this.min = node;
         IAVLNode other_node = this.getRoot();
-        while (other_node.getRight().getKey()!=-1) {
+        while (other_node.getRight().isRealNode()) {
             other_node = other_node.getRight();
         }
         this.max = other_node;
@@ -214,9 +223,6 @@ public class AVLTree {
         IAVLNode A = B.getLeft();
         IAVLNode B_Parent = B.getParent();
         int num_of_height_changes = 0;
-//        A.setParent(B.getParent());
-//        B.setParent(A);
-//        A.getRight().setParent(B);
         B.setLeft(A.getRight());
         A.setRight(B);
         num_of_height_changes += updateHeight(B);
@@ -240,9 +246,6 @@ public class AVLTree {
         IAVLNode A = B.getRight();
         IAVLNode B_Parent = B.getParent();
         int num_of_height_changes = 0;
-//        A.setParent(B.getParent());
-//        B.setParent(A);
-//        A.getLeft().setParent(B);
         B.setRight(A.getLeft());
         A.setLeft(B);
         num_of_height_changes += updateHeight(B);
@@ -281,7 +284,7 @@ public class AVLTree {
 //        delete node
         IAVLNode virtual_node = new AVLNode(-1, null);
         IAVLNode deleted_parent = deleted.getParent();
-        if (deleted.getRight().getKey() == -1 && deleted.getLeft().getKey() == -1) { // deleted is a leaf
+        if (!deleted.getRight().isRealNode() && !deleted.getLeft().isRealNode()) { // deleted is a leaf
             if (deleted_parent == null) { //deleted is root
                 this.setRoot(null);
                 return 0;
@@ -293,7 +296,7 @@ public class AVLTree {
                 deleted_parent.setLeft(virtual_node);
             }
         }
-        else if (deleted.getRight().getKey() == -1) { // only left son
+        else if (!deleted.getRight().isRealNode()) { // only left son
             if (deleted_parent == null) {
                 deleted.getLeft().setParent(null);
                 this.root = deleted.getLeft(); // take care of height
@@ -306,7 +309,7 @@ public class AVLTree {
                 }
             }
         }
-        else if (deleted.getLeft().getKey() == -1) { // only right son
+        else if (!deleted.getLeft().isRealNode()) { // only right son
             if (deleted_parent == null) {
                 deleted.getRight().setParent(null);
                 this.root = deleted.getRight(); //
@@ -388,18 +391,19 @@ public class AVLTree {
                 }
         }
         }
-        num_of_height_changes += updateHeightFromBottom(fix_balance);
-        updateSizeFromBottom(fix_balance);
+        num_of_height_changes += updateHeightFromBottom(size_update);
+        updateSizeFromBottom(size_update);
         if (k==this.min.getKey() || k==this.max.getKey()) {
             updateMinMax();
         }
         return num_of_rotations + num_of_height_changes;
     }
 
+
 // node.getRight!=null;
     public IAVLNode findSuccessor(IAVLNode node) {
         node = node.getRight();
-        while (node.getLeft().getKey()!=-1) {
+        while (node.getLeft().isRealNode()) {
             node = node.getLeft();
         }
         return node;
@@ -462,7 +466,7 @@ public class AVLTree {
     }
 
     public int[][] EnvelopeKeysToArray(int[] array, int index, IAVLNode node) {
-        if (node.getKey() == -1) {
+        if (!node.isRealNode()) {
             int[][] for_return = {array, {index}};
             return for_return;
         }
@@ -490,7 +494,7 @@ public class AVLTree {
     }
 
     public String[][] EnvelopeInfoToArray(String[] array, String index, IAVLNode node) {
-        if (node.getKey() == -1) {
+        if (!node.isRealNode()) {
             String[][] for_return = {array, {index}};
             return for_return;
         }
@@ -545,11 +549,11 @@ public class AVLTree {
         AVLTree T1 = new AVLTree();
         AVLTree T2 = new AVLTree();
         AVLTree[] trees = {T1, T2};
-        if (node.getLeft().getKey()!=-1) {
+        if (node.getLeft().isRealNode()) {
             T1.root = node.getLeft();
             T1.root.setParent(null);
         }
-        if (node.getRight().getKey()!=-1) {
+        if (node.getRight().isRealNode()) {
             T2.root = node.getRight();
             T2.root.setParent(null);
         }
@@ -564,7 +568,7 @@ public class AVLTree {
         AVLTree added_tree = new AVLTree();
         while (node!=null) {
             if (this.isRightSon(node, prev_node)) {
-                if (node.getLeft().getKey()!=-1) {
+                if (node.getLeft().isRealNode()) {
                     added_tree.setRoot(node.getLeft());
                 }
                 else {
@@ -573,7 +577,7 @@ public class AVLTree {
                 T1.join(node, added_tree);
             }
             else {
-                if (node.getRight().getKey()!=-1) {
+                if (node.getRight().isRealNode()) {
                     added_tree.setRoot(node.getRight());
                 }
                 else {
@@ -590,75 +594,6 @@ public class AVLTree {
         T1.updateMinMax();
         T2.updateMinMax();
         return trees;
-    }
-
-    public double[] splitCost(int x) {
-        double[] cost = new double[2]; // [average cost, max cost]
-        IAVLNode node = searchNode(x);
-        AVLTree T1 = new AVLTree();
-        AVLTree T2 = new AVLTree();
-        double overall_cost = 0.;
-        double num_of_joins = 0.;
-        double max_cost = 0.;
-        AVLTree[] trees = {T1, T2};
-        if (node.getLeft().getKey()!=-1) {
-            T1.root = node.getLeft();
-            T1.root.setParent(null);
-        }
-        if (node.getRight().getKey()!=-1) {
-            T2.root = node.getRight();
-            T2.root.setParent(null);
-        }
-        if (node.equals(this.root)) {
-            T1.updateMinMax();
-            T2.updateMinMax();
-            return cost;
-        }
-        IAVLNode prev_node = node;
-        node = node.getParent();
-        IAVLNode next_node = node.getParent();
-        AVLTree added_tree = new AVLTree();
-        int join_cost = 0;
-        while (node!=null) {
-            if (this.isRightSon(node, prev_node)) {
-                if (node.getLeft().getKey()!=-1) {
-                    added_tree.setRoot(node.getLeft());
-                }
-                else {
-                    added_tree.setRoot(null);
-                }
-                join_cost = T1.join(node, added_tree);
-                num_of_joins++;
-                overall_cost+=join_cost;
-                if (max_cost<join_cost) {
-                    max_cost = join_cost;
-                }
-            }
-            else {
-                if (node.getRight().getKey()!=-1) {
-                    added_tree.setRoot(node.getRight());
-                }
-                else {
-                    added_tree.setRoot(null);
-                }
-                join_cost=T2.join(node, added_tree);
-                num_of_joins++;
-                overall_cost+=join_cost;
-                if (max_cost<join_cost) {
-                    max_cost = join_cost;
-                }
-            }
-            prev_node = node;
-            node = next_node;
-            if (next_node!=null) {
-                next_node = next_node.getParent();
-            }
-        }
-        cost[0] = overall_cost/ num_of_joins;
-        cost[1] = max_cost;
-        T1.updateMinMax();
-        T2.updateMinMax();
-        return cost;
     }
 
 
@@ -706,24 +641,6 @@ public class AVLTree {
 //        update min max
         IAVLNode[] minArray = {x, this.min, t.min};
         IAVLNode[] maxArray = {x, this.max, t.max};
-//        if (tall_tree.getRoot().getKey() > x.getKey()) {
-//            this.max = tall_tree.max;
-//            if (short_tree.empty()) {
-//                this.min = x;
-//            }
-//            else {
-//                this.min = short_tree.min;
-//            }
-//        }
-//        else {
-//            this.min = tall_tree.min;
-//            if (short_tree.empty()) {
-//                this.max = x;
-//            }
-//            else {
-//                this.max = short_tree.max;
-//            }
-//        }
         if (tall_tree.getRoot().getKey() > x.getKey()) {
             while (h_node.getHeight() > short_tree.getTreeHeight()) {
                 h_node = h_node.getLeft();
@@ -788,96 +705,6 @@ public class AVLTree {
         }
         this.max = temp_max;
         return Math.abs(this_height-t_height) + 1;
-    }
-
-    public int insert_from_max(int k, String i) {
-//        creating new node and virtual sons
-        IAVLNode virtual_node_left = new AVLNode(-1, null);
-        IAVLNode virtual_node_right = new AVLNode(-1, null);
-        IAVLNode added_node = new AVLNode(k, i);
-//        update min amd max
-//        if (this.max == null || k > this.max.getKey()) {
-//            this.max = added_node;
-//        }
-//        if (this.min == null || k < this.min.getKey()) {
-//            this.min = added_node;
-//        }
-        int num_of_edges = 0;
-        int num_of_height_changes = 0;
-        added_node.setLeft(virtual_node_left);
-        added_node.setRight(virtual_node_right);
-        if (this.empty()) {
-            this.setRoot(added_node);
-            return 1;
-        }
-//        finger search - finding k's place
-        IAVLNode node = this.max;
-//        num_of_edges++;
-        while (node.getParent()!=null) {
-            if (node.getParent().getKey() < k) {
-                break;
-            }
-            node = node.getParent();
-            num_of_edges++;
-        }
-//        node = node.getLeft();
-//        num_of_edges++;
-        while (node.getKey() != -1) {
-            int node_key = node.getKey();
-            if (node_key > k) {
-                node = node.getLeft();
-                num_of_edges++;
-            }
-            if (node_key < k) {
-                node = node.getRight();
-                num_of_edges++;
-            }
-        }
-//        adding k
-        node = node.getParent();
-        num_of_edges++;  //???????????????
-        if (k < node.getKey()) {
-            node.setLeft(added_node);
-        } else {
-            node.setRight(added_node);
-        }
-//        starting rebalance
-        int num_of_rotations = 0;
-        while (node != null) {
-            int BF = balanceFactor(node);
-            if (BF==0) {
-                break;
-            }
-            else if (Math.abs(BF)==1) {
-                node.setHeight(node.getHeight()+1); //update height
-                num_of_height_changes++;
-                node = node.getParent();
-            }
-            else if (BF == 2) {
-                if (balanceFactor(node.getLeft()) == 1) {
-                    num_of_height_changes += right(node);
-                    num_of_rotations++;
-                } else { // node.left.BF == -1
-                    num_of_height_changes += left(node.getLeft());
-                    num_of_height_changes += right(node);
-                    num_of_rotations += 2;
-                }
-                break;
-            }
-            else {  // Bf == -2
-                if (balanceFactor(node.getRight()) == -1) {
-                    num_of_height_changes += left(node);
-                    num_of_rotations++;
-                } else { // node.right.BF == +1
-                    num_of_height_changes += right(node.getRight());
-                    num_of_height_changes += left(node);
-                    num_of_rotations += 2;
-                }
-                break;
-            }
-        }
-        updateSizeFromBottom(added_node);
-        return num_of_edges;
     }
 
 
